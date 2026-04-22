@@ -1,31 +1,28 @@
 version: "3.8"
 
 services:
-  office_backend:
+  wizzgeeks-leave-backend:
     build:
       context: ../office_leave_management_backend
       dockerfile: Dockerfile
-    image: office-app/office_backend
+    image: wizzgeeks-leave/backend
     ports:
-      - "8000:8000"
+      - "9051:9051"
     env_file:
       - ../office_leave_management_backend/.env
     networks:
       - shared-app-network
 
-  office_frontend:
+  wizzgeeks-leave-frontend:
     build:
       context: ../office_leave_management_frontend
       dockerfile: Dockerfile
-    image: office-app/office_frontend
+    image: wizzgeeks-leave/frontend
     ports:
-      - "80:80"
+      - "9050:80"
     networks:
       - shared-app-network
-
-
 
 networks:
   shared-app-network:
     external: true
-
