@@ -1,0 +1,63 @@
+version: "3.8"
+
+services:
+  office_backend:
+    build:
+      context: ../office_leave_management_backend
+      dockerfile: Dockerfile
+    image: office-app/office_backend
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGODB_URL=mongodb+srv://wizzmod:wizzmod@wizzmod-cluster.gu90dde.mongodb.net/leave_management?retryWrites=true&w=majority
+    depends_on:
+      - db
+    networks:
+      - office-network
+
+  office_frontend:
+    build:
+      context: ../office_leave_management_frontend
+      dockerfile: Dockerfile
+    image: office-app/office_frontend
+    ports:
+      - "3000:80"
+    networks:
+      - office-network
+
+  db:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ulimits:
+      nofile:
+        soft: 64000
+        hard: 64000
+    networks:
+      - office-network
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    image: office-app/nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - office_frontend
+      - office_backend
+      - db
+    networks:
+      - office-network
+
+networks:
+  office-network:
+
+volumes:
+  mongo_data:
