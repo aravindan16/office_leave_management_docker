@@ -5,7 +5,7 @@ services:
     build:
       context: ../office_leave_management_backend
       dockerfile: Dockerfile
-    image: wizzgeeks-leave/backend
+    image: leave-backend
     ports:
       - "9051:9051"
     env_file:
@@ -17,7 +17,7 @@ services:
     build:
       context: ../office_leave_management_frontend
       dockerfile: Dockerfile
-    image: wizzgeeks-leave/frontend
+    image: leave-frontend
     ports:
       - "9050:9050"
 
